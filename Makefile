@@ -3,9 +3,9 @@ NEWLINE=UNIX
 SHELL=bash
 
 raw:
-	sed -e 's|^server=/\(.*\)/223.5.5.5$$|\1|' accelerated-domains.china.conf | grep -Ev -e '^#' -e '^$$' > accelerated-domains.china.raw.txt
-	sed -e 's|^server=/\(.*\)/223.5.5.5$$|\1|' google.china.conf | grep -Ev -e '^#' -e '^$$' > google.china.raw.txt
-	sed -e 's|^server=/\(.*\)/223.5.5.5$$|\1|' apple.china.conf | grep -Ev -e '^#' -e '^$$' > apple.china.raw.txt
+	sed -e 's|^server=/\(.*\)/114.114.114.114$$|\1|' accelerated-domains.china.conf | grep -Ev -e '^#' -e '^$$' > accelerated-domains.china.raw.txt
+	sed -e 's|^server=/\(.*\)/114.114.114.114$$|\1|' google.china.conf | grep -Ev -e '^#' -e '^$$' > google.china.raw.txt
+	sed -e 's|^server=/\(.*\)/114.114.114.114$$|\1|' apple.china.conf | grep -Ev -e '^#' -e '^$$' > apple.china.raw.txt
 
 adguardhome: raw
 	cat google.china.raw.txt | tr "\n" "/" | sed -e 's|^|/|' -e 's|\(.*\)|[\1]$(SERVER)|' > google.china.adguardhome.conf
