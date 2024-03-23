@@ -1,12 +1,9 @@
 name: Makefile CI
 
 on:
-  # workflow_run:
-  #   workflows: ["test.yaml"]
-  #   types:
-  #     - completed
-  workflow_dispatch:
-
+  schedule:
+  - cron: "0 17 * * *"
+  
 jobs:
   build:
 
