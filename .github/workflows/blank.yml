@@ -1,0 +1,44 @@
+name: Makefile CI
+
+on:
+  # workflow_run:
+  #   workflows: ["test.yaml"]
+  #   types:
+  #     - completed
+  workflow_dispatch:
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Download a file
+      run: |
+         wget -O apple.china.conf https://raw.githubusercontent.com/felixonmars/dnsmasq-china-list/master/apple.china.conf
+         wget -O google.china.conf https://raw.githubusercontent.com/felixonmars/dnsmasq-china-list/master/google.china.conf
+         wget -O accelerated-domains.china.conf https://raw.githubusercontent.com/felixonmars/dnsmasq-china-list/master/accelerated-domains.china.conf
+
+    - name: Install dependencies
+      run: make SERVER=https://dns.alidns.com/dns-query adguardhome
+
+    - name: Combine configuration files
+      run: |
+        (cat google.china.adguardhome.conf; echo) > combined.adguardhome.txt
+        (cat accelerated-domains.china.adguardhome.conf; echo) >> combined.adguardhome.txt
+        (cat apple.china.adguardhome.conf; echo) >> combined.adguardhome.txt
+        echo "[/*/]https://dns.cloudflare.com/dns-query	" >> combined.adguardhome.txt
+
+    - name: Commit files
+      run: |
+        git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        git config --local user.name "github-actions[bot]"
+        git add combined.adguardhome.txt
+        git commit -m "built on $(TZ='Asia/Shanghai' date)"
+    - name: Push changes
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        branch: ${{ github.ref }}
