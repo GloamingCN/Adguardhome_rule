@@ -27,6 +27,7 @@ jobs:
         (cat google.china.adguardhome.conf; echo) > combined.adguardhome.txt
         (cat accelerated-domains.china.adguardhome.conf; echo) >> combined.adguardhome.txt
         (cat apple.china.adguardhome.conf; echo) >> combined.adguardhome.txt
+        echo "[/steamserver.net/]https://dns.alidns.com/dns-query" >> combined.adguardhome.txt
         echo "https://dns.cloudflare.com/dns-query" >> combined.adguardhome.txt
 
     - name: Commit files
